@@ -6,17 +6,17 @@ This library makes possible to animate your React component with a few lines of 
 ## Instalation
 From root directory: 
 ```sh
-npm i react-animate
+npm i anim-react
 ```
 or
 ```sh
-yarn add react-animate
+yarn add anim-react
 ```
 
 ## Usage
 ```js
 import { useRef } from 'react';
-import { useAnim } from 'react-animate';
+import { useAnim } from 'anim-react';
 
 const myComponent = () => {
     const refToMyComponent = useRef(null); // create whatever ref
