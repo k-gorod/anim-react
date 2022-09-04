@@ -78,6 +78,7 @@ export const useAnim: animType = (props): animReturn => {
   const defineAnimation = () => {
     if(ref && ref.current){
       animationInstance.current = ref.current.animate(keyframes as KeyframesType, animOptions);
+      if(!animOptions.isActive) animationInstance.current.pause();
     }
   }
 
