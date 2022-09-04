@@ -23,7 +23,7 @@
         "noUnusedLocals": false,
         "rootDir": "src",
         "baseUrl": "src",
-        "jsx": "react-jsx",
+        "jsx": "react",
         "lib": [
             "es5",
             "es6",
@@ -45,7 +45,9 @@
         "noErrorTruncation": true
     },
     "include": [
-        "src"
+        "src",
+        "src/**/*.d.ts",
+        "src/**/*.ts"
     ],
     "types": [
         "react",

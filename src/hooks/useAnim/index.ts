@@ -1,14 +1,15 @@
 import { defaultAnimConfig, namedConfig } from '../../constants';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { animConfigType, AnimInstT, animType } from 'types';
+import { AnimConfigType, AnimInstT, animReturn, animType, KeyframesType } from '../../types';
 
-export const useAnim: animType = ({
-  ref,
-  animName,
-  userConfig
-}) => {
+export const useAnim: animType = (props): animReturn => {
+  const {
+    ref,
+    animName,
+    userConfig
+  } = useMemo(()=> props, [props]);
   
-  const [config, setAnimConfig] = useState<animConfigType>({
+  const [config, setAnimConfig] = useState<AnimConfigType>({
     ...defaultAnimConfig,
     ...(animName ? namedConfig[animName] : {}),
     ...userConfig
@@ -20,10 +21,17 @@ export const useAnim: animType = ({
 
   const finnishCallback = useRef(() => {})
 
-  const setState = (isActive: boolean) => {
-    setAnimConfig((prev) => ({ ...prev, isActive }));
+  const setState = (activity: (isActive: boolean) => boolean | boolean) => {
+    if(activity){
+      if(typeof activity === 'function'){
+        setAnimConfig((prev) => ({ ...prev, isActive: activity(config.isActive!) }));
+      }else {
+        setAnimConfig((prev) => ({ ...prev, isActive: activity }));
+      }
+    }else {
+      console.error("React animation: attempt to use animation.setState function with forbidden argument")
+    }
   };
-
 
   const onFinish = () => {
     setAnimConfig((prev) => ({ ...prev, isActive: false, finished: true }));
@@ -38,7 +46,7 @@ export const useAnim: animType = ({
     ref?.current?.getAnimations().forEach((e) => e.cancel());
   }
 
-  const updateConfig = (newConfigs: animConfigType) => {
+  const updateConfig = (newConfigs: AnimConfigType) => {
     hardStop() // cancel current  animation
 
     setAnimConfig((prev) => ({ ...prev, newConfigs })); // update config
@@ -51,6 +59,7 @@ export const useAnim: animType = ({
   const setEndCallback = (callback: ()=> any) => {
     finnishCallback.current = callback
   }
+
   // ========TODO
 
   // const keyframeParse = (data: PropertyIndexedKeyframes | Keyframe[]): PropertyIndexedKeyframes | Keyframe[] => {
@@ -68,13 +77,9 @@ export const useAnim: animType = ({
 
   const defineAnimation = () => {
     if(ref && ref.current){
-      animationInstance.current = ref.current.animate(keyframes as PropertyIndexedKeyframes | Keyframe[] | null, animOptions);
+      animationInstance.current = ref.current.animate(keyframes as KeyframesType, animOptions);
     }
   }
-
-  useEffect(() => {
-    defineAnimation()
-  }, []);
 
   useEffect(()=>{
     const { current : animation } = animationInstance;
@@ -83,8 +88,18 @@ export const useAnim: animType = ({
       animation.onfinish = onFinish
       animation.oncancel = onFinish
     }
+
   }, [finnishCallback.current])
 
+  useEffect(()=>{
+    config.isActive ?
+    animationInstance.current?.play() :
+    animationInstance.current?.pause();
+  }, [config.isActive])
+
+  useEffect(() => {
+    defineAnimation()
+  }, []);
 
   return {
     config, setState, updateConfig, hardStop, setEndCallback

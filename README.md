@@ -52,4 +52,4 @@ Already existing animations names:
 2. slideFormRight
 3. slideFromTop
 4. slideFromBottom
-5. jumpTextHighlight
+5. opacityAppear

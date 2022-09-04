@@ -1,17 +1,24 @@
 {
   "name": "anim-react",
-  "version": "1.0.1",
+  "version": "1.0.996",
   "description": "",
   "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "source": "src/",
   "scripts": {
-    "build": "tsc"
+    "prepub": "node ./scripts/increase-version.js && yarn build",
+    "build": "tsc -b"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/k-gorod/anim-react.git"
   },
-  "keywords": ["animate", "animation", "react", "hook"],
+  "keywords": [
+    "animate",
+    "animation",
+    "react",
+    "hook"
+  ],
   "author": "Kostya Gorodnichuk",
   "license": "ISC",
   "bugs": {
