@@ -1,13 +1,13 @@
 {
   "name": "anim-react",
-  "version": "1.0.996",
+  "version": "1.0.998",
   "description": "",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "source": "src/",
   "scripts": {
     "prepub": "node ./scripts/increase-version.js && yarn build",
-    "build": "tsc -b"
+    "build": "webpack"
   },
   "repository": {
     "type": "git",
@@ -31,7 +31,10 @@
     "@types/react-dom": "^18.0.6",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "typescript": "^4.8.2"
+    "ts-loader": "^9.3.1",
+    "typescript": "^4.8.2",
+    "webpack": "^5.74.0",
+    "webpack-cli": "^4.10.0"
   },
   "peerDependencies": {
     "react": "*",
