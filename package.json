@@ -1,6 +1,6 @@
 {
   "name": "anim-react",
-  "version": "1.1.101",
+  "version": "1.1.102",
   "description": "Library that makes possible to animate your React component with a few lines of code.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
