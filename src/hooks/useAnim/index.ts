@@ -17,8 +17,6 @@ export const useAnim: animType = (props): animReturn => {
   
   const animationInstance: AnimInstT = useRef<Animation>(null);
   
-  const scrollEventInstance: React.MutableRefObject<any> = useRef(null);
-  
   const finnishCallback = useRef(() => {})
 
   const { keyframes, ...animOptions } = useMemo(() => config, [config]);
@@ -29,21 +27,21 @@ export const useAnim: animType = (props): animReturn => {
       width: windowWidth,
       pageTop: currentScrollY,
       pageLeft: currentScrollX,
-    } = (e?.target as Document)?.defaultView?.visualViewport!;
+    } = e?.target?.defaultView?.visualViewport!;
+
     setAnimConfig((prev) => ({
       ...prev,
       spacing: {
+        ...prev.spacing,
         windowHeight,
         windowWidth,
         currentScrollY,
-        currentScrollX,
-        ...prev.spacing
+        currentScrollX
       } }));
   }, [])
 
-  
   const elementInView = useCallback(()=>{
-    if(config.spacing){
+    if(config.spacing && config.startInSight){
       const {
         windowHeight,
         windowWidth,
@@ -53,24 +51,18 @@ export const useAnim: animType = (props): animReturn => {
         offsetTop,
       } = config.spacing!
   
-      if(windowHeight != null &&
-        windowWidth != null &&
-        currentScrollY != null &&
-        currentScrollX != null &&
-        offsetLeft != null &&
-        offsetTop != null &&
-        currentScrollY < offsetTop &&
-        (currentScrollY + windowHeight) > offsetTop &&
-        currentScrollX < offsetLeft &&
-        (currentScrollX + windowWidth) < offsetLeft
+      if(
+        Object.values(config.spacing).every((el)=>el!= null) &&
+        currentScrollY! < offsetTop! &&
+        (currentScrollY! + windowHeight!) > offsetTop! &&
+        currentScrollX! < offsetLeft! &&
+        (currentScrollX! + windowWidth!) > offsetLeft!
       ){
-        console.log("true")
-        setState(true);
-      }else{
-        console.log("false")
+        setAnimConfig((prev) => ({ ...prev, isActive: true, startInSight: false }));
+        ref.current?.ownerDocument.removeEventListener('scroll', handleScroll);
       }
     }
-  }, [config.spacing])
+  }, [])
 
   const setState = (activity: ((isActive: boolean) => boolean) | boolean) => {
     if(activity){
@@ -163,11 +155,9 @@ export const useAnim: animType = (props): animReturn => {
     animationInstance.current?.pause();
   }, [config.isActive])
 
-  
-
   useEffect(()=>{
     if(config.startInSight) {
-      scrollEventInstance.current = ref.current?.ownerDocument.addEventListener('scroll', handleScroll);
+      ref.current?.ownerDocument.addEventListener('scroll', handleScroll);
     }
   }, [
     config.startInSight,
@@ -179,10 +169,7 @@ export const useAnim: animType = (props): animReturn => {
       elementInView()
     }
   }, [
-    config.spacing?.windowHeight,
-    config.spacing?.windowWidth,
-    config.spacing?.currentScrollY,
-    config.spacing?.currentScrollX
+    config.spacing
   ])
 
   useEffect(() => {
