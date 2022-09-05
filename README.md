@@ -44,9 +44,9 @@ export default myComponent;
 | **config** | Object with 3 fields: <br>{ <br> &nbsp;&nbsp;**ref**, <br> &nbsp;&nbsp;**animName**, <br>  &nbsp;&nbsp;**userConfig**, <br> } |
 | **ref** | [React ref](https://reactjs.org/docs/hooks-reference.html#useref) that you currently passing to target component.  <br> **- type :** _React.MutableRefObject<HTMLElement \| null>_ <br> **- required** <br> <br> _Definition example: <br> const **ref** = useRef(null);_|
 | **animName** | You can choose one of our [predefined animations](#names) , and use it without any customisations if you want. <br> **- type :** String  |
-| **userConfig** | Object that provides animation definition/customisation : <br> { <br> &nbsp;&nbsp;**isActive**, <br> &nbsp;&nbsp;**keyframes**, <br> &nbsp;&nbsp; _...any other **JS** animation option_ <br> } <br> _Here you can [Read more](https://developer.mozilla.org/en-US/docs/Web/API/KeyframeEffect/KeyframeEffect){target="_blank"} about animation keyframes/options._ |
+| **userConfig** | Object that provides animation definition/customisation : <br> { <br> &nbsp;&nbsp;**isActive**, <br> &nbsp;&nbsp;**keyframes**, <br> &nbsp;&nbsp; _...any other **JS** animation option_ <br> } <br> _Here you can <a href="https://developer.mozilla.org/en-US/docs/Web/API/KeyframeEffect/KeyframeEffect" target="_blank">Read more</a> about animation keyframes/options._ |
 | **isActive** | Here you can define animation activity state _(true/false)_: <br> **- type :** Boolean <br> **- default :** true |
-| **keyframes** | Animation frames that defines which and how style properties would be animated. [Read more](https://developer.mozilla.org/en-US/docs/Web/API/Web_Animations_API/Keyframe_Formats){target="_blank"}  |
+| **keyframes** | Animation frames that defines which and how style properties would be animated. <a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Animations_API/Keyframe_Formats" target="_blank">Read more</a>  |
 | ...other animation options | Here you can  <a href="https://developer.mozilla.org/en-US/docs/Web/API/KeyframeEffect/KeyframeEffect" target="_blank">Read more</a>  about all animation options. |
 
 ## Names
@@ -60,5 +60,5 @@ Already existing animations names:
 
 |||
 |----------------|-------------------------------|
-| package | [**npm**](https://www.npmjs.com/package/anim-react){target="_blank"} |
-| repository |[**GitHub**](https://github.com/k-gorod/anim-react){target="_blank"}|
+| package | <a style="font-weight:bold" href="https://www.npmjs.com/package/anim-react" target="_blank">npm</a> |
+| repository |   <a style="font-weight:bold" href="https://github.com/k-gorod/anim-react" target="_blank">GitHub</a> |
