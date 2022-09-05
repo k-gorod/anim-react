@@ -21,10 +21,9 @@ import { useAnim } from 'anim-react';
 const myComponent = () => {
     const refToMyComponent = useRef(null); // create whatever ref
 /*
-    if you don't planing to interact with animation, you can proceed without "const myComponentAnimation ="
+    if you don't planning to interact with animation, you can proceed without "const myComponentAnimation ="
 */
     const myComponentAnimation = useAnim({
-
         ref: refToMyComponent, // pass ref
         animName: "slideFromLeft" // name of predefined animation config
     })
@@ -50,7 +49,7 @@ export default myComponent;
 | ...other animation options | Here you can  <a href="https://developer.mozilla.org/en-US/docs/Web/API/KeyframeEffect/KeyframeEffect" target="_blank">Read more</a>  about all animation options. |
 
 ## Names
-Already existing animations names:
+Already existing animation names:
 1. slideFromLeft
 2. slideFormRight
 3. slideFromTop
