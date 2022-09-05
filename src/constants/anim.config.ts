@@ -26,14 +26,14 @@ export const defaultAnimConfig: AnimConfigType = {
 export const namedConfig: {[key: string]: AnimConfigType} = {
   slideFromLeft: {
     keyframes: [
-      { opacity: 0, transform: 'translate(120px, 0)' },
+      { opacity: 0, transform: 'translate(-120px, 0)' },
       { opacity: 1, transform: 'translate(0, 0)' },
     ],
     iterations: 1,
   },
   slideFormRight: {
     keyframes: [
-      { opacity: 0, transform: 'translate(-120px, 0)' },
+      { opacity: 0, transform: 'translate(120px, 0)' },
       { opacity: 1, transform: 'translate(0, 0)' },
     ],
     iterations: 1,
