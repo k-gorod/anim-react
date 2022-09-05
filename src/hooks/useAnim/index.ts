@@ -1,5 +1,5 @@
 import { defaultAnimConfig, namedConfig } from '../../constants';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { AnimConfigType, AnimInstT, animReturn, animType, KeyframesType } from '../../types';
 
 export const useAnim: animType = (props): animReturn => {
@@ -14,14 +14,65 @@ export const useAnim: animType = (props): animReturn => {
     ...(animName ? namedConfig[animName] : {}),
     ...userConfig
   });
+  
+  const animationInstance: AnimInstT = useRef<Animation>(null);
+  
+  const scrollEventInstance: React.MutableRefObject<any> = useRef(null);
+  
+  const finnishCallback = useRef(() => {})
 
   const { keyframes, ...animOptions } = useMemo(() => config, [config]);
 
-  const animationInstance: AnimInstT = useRef<Animation>(null);
+  const handleScroll = useCallback((e: any) => {
+    const { 
+      height: windowHeight,
+      width: windowWidth,
+      pageTop: currentScrollY,
+      pageLeft: currentScrollX,
+    } = (e?.target as Document)?.defaultView?.visualViewport!;
+    setAnimConfig((prev) => ({
+      ...prev,
+      spacing: {
+        windowHeight,
+        windowWidth,
+        currentScrollY,
+        currentScrollX,
+        ...prev.spacing
+      } }));
+  }, [])
 
-  const finnishCallback = useRef(() => {})
+  
+  const elementInView = useCallback(()=>{
+    if(config.spacing){
+      const {
+        windowHeight,
+        windowWidth,
+        currentScrollY,
+        currentScrollX,
+        offsetLeft,
+        offsetTop,
+      } = config.spacing!
+  
+      if(windowHeight != null &&
+        windowWidth != null &&
+        currentScrollY != null &&
+        currentScrollX != null &&
+        offsetLeft != null &&
+        offsetTop != null &&
+        currentScrollY < offsetTop &&
+        (currentScrollY + windowHeight) > offsetTop &&
+        currentScrollX < offsetLeft &&
+        (currentScrollX + windowWidth) < offsetLeft
+      ){
+        console.log("true")
+        setState(true);
+      }else{
+        console.log("false")
+      }
+    }
+  }, [config.spacing])
 
-  const setState = (activity: (isActive: boolean) => boolean | boolean) => {
+  const setState = (activity: ((isActive: boolean) => boolean) | boolean) => {
     if(activity){
       if(typeof activity === 'function'){
         setAnimConfig((prev) => ({ ...prev, isActive: activity(config.isActive!) }));
@@ -92,11 +143,47 @@ export const useAnim: animType = (props): animReturn => {
 
   }, [finnishCallback.current])
 
+
+  useEffect(()=>{
+    const { offsetLeft, offsetTop } = ref?.current!
+    setAnimConfig((prev) => ({
+      ...prev,
+      spacing: {
+        offsetLeft,
+        offsetTop,
+        ...prev.spacing
+      } }));
+  }, [
+    ref?.current
+  ])
+
   useEffect(()=>{
     config.isActive ?
     animationInstance.current?.play() :
     animationInstance.current?.pause();
   }, [config.isActive])
+
+  
+
+  useEffect(()=>{
+    if(config.startInSight) {
+      scrollEventInstance.current = ref.current?.ownerDocument.addEventListener('scroll', handleScroll);
+    }
+  }, [
+    config.startInSight,
+    handleScroll
+  ])
+
+  useEffect(()=>{
+    if(config.spacing){
+      elementInView()
+    }
+  }, [
+    config.spacing?.windowHeight,
+    config.spacing?.windowWidth,
+    config.spacing?.currentScrollY,
+    config.spacing?.currentScrollX
+  ])
 
   useEffect(() => {
     defineAnimation()

@@ -1,12 +1,23 @@
 import React from 'react';
 
+
+
 export type refType = React.MutableRefObject<HTMLElement | null>
 
 export type KeyframesType = PropertyIndexedKeyframes | Keyframe[] | {};
 export interface AnimConfigType extends KeyframeAnimationOptions {
   isActive?: boolean,
   keyframes?: KeyframesType
-  finished?: boolean
+  finished?: boolean,
+  startInSight?: boolean,
+  spacing?: {
+    windowHeight?: number,
+    windowWidth?: number,
+    currentScrollY?: number,
+    currentScrollX?: number,
+    offsetLeft?: number,
+    offsetTop?: number,
+  }
 }
 
 export type setAnimFooType = (props: boolean) => void
