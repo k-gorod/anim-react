@@ -57,8 +57,6 @@ Already existing animations names:
 4. slideFromBottom
 5. opacityAppear
 
-
-|||
-|----------------|-------------------------------|
-| package | <a style="font-weight:bold" href="https://www.npmjs.com/package/anim-react" target="_blank">npm</a> |
-| repository |   <a style="font-weight:bold" href="https://github.com/k-gorod/anim-react" target="_blank">GitHub</a> |
+<a href="https://www.npmjs.com/package/anim-react" target="_blank">Npm package</a>
+<br>
+<a style="font-weight:bold" href="https://github.com/k-gorod/anim-react" target="_blank">GitHub repository</a> 
