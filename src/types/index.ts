@@ -24,7 +24,7 @@ export type setAnimFooType = (props: boolean) => void
 
 export type animReturn = ({
   config: AnimConfigType; 
-  setState: (activity: (isActive: boolean) => boolean | boolean) => void;
+  setState: (activity: ((isActive: boolean) => boolean) | boolean) => void;
   updateConfig: (newConfigs: AnimConfigType) => void; hardStop:() => void;
   setEndCallback: (callback: () => any) => void
 })
