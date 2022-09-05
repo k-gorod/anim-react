@@ -51,28 +51,33 @@ export const useAnim: animType = (props): animReturn => {
         offsetTop,
       } = config.spacing!
   
-      if(
-        Object.values(config.spacing).every((el)=>el!= null) &&
-        currentScrollY! < offsetTop! &&
-        (currentScrollY! + windowHeight!) > offsetTop! &&
-        currentScrollX! < offsetLeft! &&
-        (currentScrollX! + windowWidth!) > offsetLeft!
+      if(windowHeight != null &&
+        windowWidth != null &&
+        currentScrollY != null &&
+        currentScrollX != null &&
+        offsetLeft != null &&
+        offsetTop != null &&
+        currentScrollY < offsetTop &&
+        (currentScrollY + windowHeight) > offsetTop &&
+        currentScrollX < offsetLeft &&
+        (currentScrollX + windowWidth) > offsetLeft
       ){
         setAnimConfig((prev) => ({ ...prev, isActive: true, startInSight: false }));
         ref.current?.ownerDocument.removeEventListener('scroll', handleScroll);
       }
     }
-  }, [])
+  }, [config.spacing])
 
   const setState = (activity: ((isActive: boolean) => boolean) | boolean) => {
-    if(activity){
-      if(typeof activity === 'function'){
+    switch(typeof activity){
+      case "function" :
         setAnimConfig((prev) => ({ ...prev, isActive: activity(config.isActive!) }));
-      }else {
+        break;
+      case "boolean" : 
         setAnimConfig((prev) => ({ ...prev, isActive: activity }));
-      }
-    }else {
-      console.error("React animation: attempt to use animation.setState function with forbidden argument")
+        break;
+      default :
+      console.error("React animation: attempt to use animation.setState function with forbidden argument");
     }
   };
 
@@ -157,6 +162,7 @@ export const useAnim: animType = (props): animReturn => {
 
   useEffect(()=>{
     if(config.startInSight) {
+      setState(false)
       ref.current?.ownerDocument.addEventListener('scroll', handleScroll);
     }
   }, [
