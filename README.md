@@ -20,8 +20,11 @@ import { useAnim } from 'anim-react';
 
 const myComponent = () => {
     const refToMyComponent = useRef(null); // create whatever ref
-    
+/*
+    if you don't planing to interact with animation, you can proceed without "const myComponentAnimation ="
+*/
     const myComponentAnimation = useAnim({
+
         ref: refToMyComponent, // pass ref
         animName: "slideFromLeft" // name of predefined animation config
     })
@@ -53,3 +56,9 @@ Already existing animations names:
 3. slideFromTop
 4. slideFromBottom
 5. opacityAppear
+
+
+|||
+|----------------|-------------------------------|
+| package | [**npm**](https://www.npmjs.com/package/anim-react){target="_blank"} |
+| repository |[**GitHub**](https://github.com/k-gorod/anim-react){target="_blank"}|
