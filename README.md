@@ -47,7 +47,7 @@ export default myComponent;
 | **userConfig** | Object that provides animation definition/customisation : <br> { <br> &nbsp;&nbsp;**isActive**, <br> &nbsp;&nbsp;**keyframes**, <br> &nbsp;&nbsp; _...any other **JS** animation option_ <br> } <br> _Here you can [Read more](https://developer.mozilla.org/en-US/docs/Web/API/KeyframeEffect/KeyframeEffect){target="_blank"} about animation keyframes/options._ |
 | **isActive** | Here you can define animation activity state _(true/false)_: <br> **- type :** Boolean <br> **- default :** true |
 | **keyframes** | Animation frames that defines which and how style properties would be animated. [Read more](https://developer.mozilla.org/en-US/docs/Web/API/Web_Animations_API/Keyframe_Formats){target="_blank"}  |
-| ...other animation options | Here you can  [Read more](https://developer.mozilla.org/en-US/docs/Web/API/KeyframeEffect/KeyframeEffect){target="_blank"}  about all animation options. |
+| ...other animation options | Here you can  <a href="https://developer.mozilla.org/en-US/docs/Web/API/KeyframeEffect/KeyframeEffect" target="_blank">Read more</a>  about all animation options. |
 
 ## Names
 Already existing animations names:
