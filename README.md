@@ -46,7 +46,7 @@ export default myComponent;
 | **userConfig** | Object that provides animation definition/customisation : <br> { <br>  &nbsp;&nbsp;**isActive**, <br>  &nbsp;&nbsp;**keyframes**, <br> &nbsp;&nbsp;**startInSight**, <br> &nbsp;&nbsp;  _...any other **JS** animation option_  <br> } <br> Here you can [Read more](https://developer.mozilla.org/en-US/docs/Web/API/KeyframeEffect/KeyframeEffect) about animation keyframes/options._ |
 | **isActive** | Here you can define animation activity state _(true/false)_: <br>  **- type :** Boolean <br>  **- default :** true |
 | **keyframes** | Animation frames that defines which and how style properties would be animated. [Read more](https://developer.mozilla.org/en-US/docs/Web/API/Web_Animations_API/Keyframe_Formats) |
-| **startInSight** | If you want to your animation starts when target element becomes visible provide true value here.  <br>  **- type :** Boolean <br> **- default :** false |
+| **startInSight** | If you want to your animation starts when target element becomes visible while scrolling provide true value here.  <br>  **- type :** Boolean <br> **- default :** false |
 | ...other animation options | Here you can [Read more](https://developer.mozilla.org/en-US/docs/Web/API/KeyframeEffect/KeyframeEffect) about all animation options. |
 
 
