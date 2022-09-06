@@ -31,7 +31,7 @@ export type animReturn = ({
 
 export type NamedAnimType = (
   "slideFromLeft" |
-  "slideFormRight" |
+  "slideFromRight" |
   "slideFromTop" |
   "slideFromBottom" |
   "opacityAppear" 

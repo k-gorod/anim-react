@@ -64,7 +64,7 @@ _const_ **return** _= useAnim(...);_
 ## Names
 Already existing animation names:
 1. slideFromLeft
-2. slideFormRight
+2. slideFromRight
 3. slideFromTop
 4. slideFromBottom
 5. opacityAppear
