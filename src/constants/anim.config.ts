@@ -31,7 +31,7 @@ export const namedConfig: {[key: string]: AnimConfigType} = {
     ],
     iterations: 1,
   },
-  slideFormRight: {
+  slideFromRight: {
     keyframes: [
       { opacity: 0, transform: 'translate(120px, 0)' },
       { opacity: 1, transform: 'translate(0, 0)' },
