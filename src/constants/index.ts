@@ -1,1 +1,2 @@
-export { defaultAnimConfig, namedConfig } from './anim.config'; // todo dynamic export each named config
+export { defaultAnimConfig } from './default.config';
+export * as namedConfig from './anim.config';
