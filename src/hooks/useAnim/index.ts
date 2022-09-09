@@ -1,90 +1,61 @@
+import {
+  useCallback, useEffect, useMemo, useRef, useState,
+} from 'react';
+
 import { defaultAnimConfig, namedConfig } from '../../constants';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { AnimConfigType, AnimInstT, animReturn, animType, KeyframesType } from '../../types';
+import {
+  AnimConfigType, AnimInstT, animReturn, animType, KeyframesType,
+} from '../../types';
+import { changeOffsets, elementInViewCheck, updateScrollPosition } from '../../utils';
 
 export const useAnim: animType = (props): animReturn => {
   const {
     ref,
     animName,
-    userConfig
-  } = useMemo(()=> props, [props]);
-  
+    userConfig,
+  } = useMemo(() => props, [props]);
+
   const [config, setAnimConfig] = useState<AnimConfigType>({
     ...defaultAnimConfig,
     ...(animName ? namedConfig[animName] : {}),
-    ...userConfig
+    ...userConfig,
   });
-  
+
   const animationInstance: AnimInstT = useRef<Animation>(null);
-  
-  const finnishCallback = useRef(() => {})
 
-  const { keyframes, ...animOptions } = useMemo(() => config, [config]);
-
-  const handleScroll = useCallback((e: any) => {
-    const { 
-      height: windowHeight,
-      width: windowWidth,
-      pageTop: currentScrollY,
-      pageLeft: currentScrollX,
-    } = e?.target?.defaultView?.visualViewport!;
-
-    setAnimConfig((prev) => ({
-      ...prev,
-      spacing: {
-        ...prev.spacing,
-        windowHeight,
-        windowWidth,
-        currentScrollY,
-        currentScrollX
-      } }));
-  }, [])
-
-  const elementInView = useCallback(()=>{
-    if(config.spacing && config.startInSight){
-      const {
-        windowHeight,
-        windowWidth,
-        currentScrollY,
-        currentScrollX,
-        offsetLeft,
-        offsetTop,
-      } = config.spacing!
-  
-      if(windowHeight != null &&
-        windowWidth != null &&
-        currentScrollY != null &&
-        currentScrollX != null &&
-        offsetLeft != null &&
-        offsetTop != null &&
-        currentScrollY < offsetTop &&
-        (currentScrollY + windowHeight) > offsetTop &&
-        currentScrollX < offsetLeft &&
-        (currentScrollX + windowWidth) > offsetLeft
-      ){
-        setAnimConfig((prev) => ({ ...prev, isActive: true, startInSight: false }));
-        ref.current?.ownerDocument.removeEventListener('scroll', handleScroll);
-      }
-    }
-  }, [config.spacing])
+  const finnishCallback = useRef(() => {});
 
   const setState = (activity: ((isActive: boolean) => boolean) | boolean) => {
-    switch(typeof activity){
-      case "function" :
+    switch (typeof activity) {
+      case 'function':
         setAnimConfig((prev) => ({ ...prev, isActive: activity(config.isActive!) }));
         break;
-      case "boolean" : 
+      case 'boolean':
         setAnimConfig((prev) => ({ ...prev, isActive: activity }));
         break;
-      default :
-      console.error("React animation: attempt to use animation.setState function with forbidden argument");
+      default:
+        console.error('React animation: attempt to use animation.setState function with forbidden argument');
     }
   };
 
+  const handleScroll = useCallback((e: any) => {
+    updateScrollPosition(e?.target?.defaultView?.visualViewport, setAnimConfig);
+  }, []);
+
+  const elementInView = useCallback(() => {
+    elementInViewCheck(
+      config.spacing,
+      () => {
+        setAnimConfig((prev) => ({ ...prev, isActive: true, startInSight: false }));
+        ref.current?.ownerDocument.removeEventListener('scroll', handleScroll);
+      },
+    );
+  }, [config.spacing]);
+
   const onFinish = () => {
     setAnimConfig((prev) => ({ ...prev, isActive: false, finished: true }));
-    finnishCallback.current()
-  }
+    finnishCallback.current();
+  };
 
   const hardStop = () => {
     animationInstance.current?.cancel();
@@ -92,27 +63,27 @@ export const useAnim: animType = (props): animReturn => {
 
   const clearFromAllJSAnimations = () => {
     ref?.current?.getAnimations().forEach((e) => e.cancel());
-  }
+  };
 
   const updateConfig = (newConfigs: AnimConfigType) => {
-    hardStop() // cancel current  animation
+    hardStop(); // cancel current  animation
 
     setAnimConfig((prev) => ({ ...prev, newConfigs })); // update config
 
     animationInstance.current = (ref.current as Element)!.animate(config.keyframes!, {
-      ...animOptions,
+      ...config,
     }); // define updated animation
   };
 
   const setEndCallback = (callback: ()=> any) => {
-    finnishCallback.current = callback
-  }
+    finnishCallback.current = callback;
+  };
 
   // ========TODO
 
   // const keyframeParse = (data: PropertyIndexedKeyframes | Keyframe[]): PropertyIndexedKeyframes | Keyframe[] => {
   //   return (
-  //      Array.isArray(data) 
+  //      Array.isArray(data)
   //    ?
   //      data
   //    :
@@ -124,65 +95,64 @@ export const useAnim: animType = (props): animReturn => {
   //  }
 
   const defineAnimation = () => {
-    if(ref && ref.current){
-      animationInstance.current = ref.current.animate(keyframes as KeyframesType, animOptions);
-      if(!animOptions.isActive) animationInstance.current.pause();
+    if (ref && ref.current) {
+      animationInstance.current = ref.current.animate(config.keyframes as KeyframesType, config);
+      if (config.startInSight || !config.isActive) {
+        animationInstance.current.pause(); // to prevent station conflict bug
+        setState(false);
+      }
+
+      if (config.startInSight) {
+        updateScrollPosition(ref.current?.ownerDocument.defaultView?.visualViewport, setAnimConfig);
+        elementInView();
+      }
     }
-  }
+  };
 
-  useEffect(()=>{
-    const { current : animation } = animationInstance;
+  useEffect(() => {
+    const { current: animation } = animationInstance;
 
-    if(animation){
-      animation.onfinish = onFinish
-      animation.oncancel = onFinish
+    if (animation) {
+      animation.onfinish = onFinish;
+      animation.oncancel = onFinish;
     }
+  }, [finnishCallback.current]);
 
-  }, [finnishCallback.current])
-
-
-  useEffect(()=>{
-    const { offsetLeft, offsetTop } = ref?.current!
-    setAnimConfig((prev) => ({
-      ...prev,
-      spacing: {
-        offsetLeft,
-        offsetTop,
-        ...prev.spacing
-      } }));
+  useEffect(() => {
+    changeOffsets(ref?.current, setAnimConfig);
   }, [
-    ref?.current
-  ])
+    ref?.current,
+  ]);
 
-  useEffect(()=>{
-    config.isActive ?
-    animationInstance.current?.play() :
-    animationInstance.current?.pause();
-  }, [config.isActive])
+  useEffect(() => {
+    config.isActive
+      ? animationInstance.current?.play()
+      : animationInstance.current?.pause();
+  }, [config.isActive]);
 
-  useEffect(()=>{
-    if(config.startInSight) {
-      setState(false)
+  useEffect(() => {
+    if (config.startInSight) {
       ref.current?.ownerDocument.addEventListener('scroll', handleScroll);
     }
   }, [
     config.startInSight,
-    handleScroll
-  ])
-
-  useEffect(()=>{
-    if(config.spacing){
-      elementInView()
-    }
-  }, [
-    config.spacing
-  ])
+    handleScroll,
+  ]);
 
   useEffect(() => {
-    defineAnimation()
+    if (config.startInSight) {
+      elementInView();
+    }
+  }, [
+    config.spacing,
+    config.startInSight,
+  ]);
+
+  useEffect(() => {
+    defineAnimation();
   }, []);
 
   return {
-    config, setState, updateConfig, hardStop, setEndCallback
-  }
+    config, setState, updateConfig, hardStop, setEndCallback,
+  };
 };
