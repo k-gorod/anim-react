@@ -10,6 +10,7 @@ module.exports = {
             name: "anim-react",
             type: "umd"
         },
+        globalObject: 'this'
     },
     resolve: {
         extensions: [".ts", ".tsx", ".js"],
