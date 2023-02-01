@@ -20,13 +20,17 @@ import { useAnim } from 'anim-react';
 
 const myComponent = () => {
     const refToMyComponent = useRef(null); // create whatever ref
-/*
-    if you don't planning to interact with animation, you can proceed without "const myComponentAnimation ="
-*/
+
+    /*
+        if you don't planning to interact with animation,
+        you can proceed without "const myComponentAnimation ="
+    */
+
     const myComponentAnimation = useAnim({
         ref: refToMyComponent, // pass ref
         animName: "slideFromLeft" // name of predefined animation config
     })
+
     return (
         <div ref={refToMyComponent}> MyComponent </div>  
         /* Do not forget to pass ref into your target component. */
@@ -35,6 +39,45 @@ const myComponent = () => {
 
 export default myComponent;
 ```
+
+or you can use custom configurations
+
+```js
+import { useRef } from 'react';
+import { useAnim } from 'anim-react';
+
+const myComponent = () => {
+    const refToMyComponent = useRef(null); // create whatever ref
+
+    /*
+        if you don't planning to interact with animation, you can proceed without "const myComponentAnimation ="
+    */
+
+    const myComponentAnimation = useAnim({
+        ref: refToMyComponent,
+        userConfig: {
+            keyframes: [
+                {
+                    opacity: 1
+                },
+                {
+                    opacity: 0
+                }
+            ],
+            direction: 'alternate',
+            duration: 3000
+        }
+    })
+
+    return (
+        <div ref={refToMyComponent}> MyComponent </div>  
+        /* Do not forget to pass ref into your target component. */
+    )
+}
+
+export default myComponent;
+```
+
 ## API
 
 **useAnim(config)**
